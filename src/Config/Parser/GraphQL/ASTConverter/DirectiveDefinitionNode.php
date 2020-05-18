@@ -13,17 +13,18 @@ class DirectiveDefinitionNode implements NodeInterface
         $config['name'] = $node->name->value;
         $config['locations'] = [];
         if (!empty($node->arguments)) {
-        foreach ($node->locations as $location) {
-            $config['locations'][] = $location->value;
+            foreach ($node->locations as $location) {
+                $config['locations'][] = $location->value;
+            }
+
+            /*  if (!empty($definition->arguments)) {
+                  $fieldConfig['args'] = self::toConfig($definition, 'arguments');
+              }*/
+
+            return [
+                'type' => 'directive',
+                'config' => $config,
+            ];
         }
-
-      /*  if (!empty($definition->arguments)) {
-            $fieldConfig['args'] = self::toConfig($definition, 'arguments');
-        }*/
-
-        return [
-            'type' => 'directive',
-            'config' => $config
-        ];
     }
 }
