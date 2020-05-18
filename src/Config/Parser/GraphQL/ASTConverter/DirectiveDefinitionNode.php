@@ -12,7 +12,7 @@ class DirectiveDefinitionNode implements NodeInterface
 
         $config['name'] = $node->name->value;
         $config['locations'] = [];
-        if (!empty($node->arguments)) {
+        if (!empty($node->locations)) {
             foreach ($node->locations as $location) {
                 $config['locations'][] = $location->value;
             }
