@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Overblog\GraphQLGenerator\Generator;
 
 use GraphQL\Type\Definition\CustomScalarType;
+use GraphQL\Type\Definition\Directive;
 use GraphQL\Type\Definition\EnumType;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InterfaceType;
@@ -37,11 +38,13 @@ EOF;
 
     private const TYPE_SYSTEMS = [
         'object' => ObjectType::class,
+        'objectExtension' => ObjectType::class,
         'interface' => InterfaceType::class,
         'enum' => EnumType::class,
         'union' => UnionType::class,
         'input-object' => InputObjectType::class,
         'custom-scalar' => CustomScalarType::class,
+        'directive' => Directive::class
     ];
 
     private const INTERNAL_TYPES = [

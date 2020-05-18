@@ -128,4 +128,9 @@ class TypeGenerator extends AbstractTypeGenerator
     {
         return '';
     }
+
+    protected function generateLocations(array $locations): string
+    {
+        return isset($fields['locations']) ? $this->processFromArray($fields['locations'], 'Locations') : '[]';
+    }
 }

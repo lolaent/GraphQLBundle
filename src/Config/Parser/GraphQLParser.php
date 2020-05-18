@@ -15,11 +15,13 @@ class GraphQLParser implements ParserInterface
 {
     private const DEFINITION_TYPE_MAPPING = [
         NodeKind::OBJECT_TYPE_DEFINITION => 'object',
+        NodeKind::OBJECT_TYPE_EXTENSION => 'objectExtension',
         NodeKind::INTERFACE_TYPE_DEFINITION => 'interface',
         NodeKind::ENUM_TYPE_DEFINITION => 'enum',
         NodeKind::UNION_TYPE_DEFINITION => 'union',
         NodeKind::INPUT_OBJECT_TYPE_DEFINITION => 'inputObject',
         NodeKind::SCALAR_TYPE_DEFINITION => 'customScalar',
+        NodeKind::DIRECTIVE_DEFINITION => 'directiveDefinition',
     ];
 
     /**

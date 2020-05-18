@@ -14,11 +14,13 @@ class TypesConfiguration implements ConfigurationInterface
 {
     private static $types = [
         'object',
+        'objectExtension',
         'enum',
         'interface',
         'union',
         'input-object',
         'custom-scalar',
+        'directive'
     ];
 
     public function getConfigTreeBuilder()
@@ -92,11 +94,13 @@ class TypesConfiguration implements ConfigurationInterface
                     ->end()
                     ->booleanNode('decorator')->info('Decorator will not be generated.')->defaultFalse()->end()
                     ->append(Config\ObjectTypeDefinition::create()->getDefinition())
+                    ->append(Config\ObjectExtensionTypeDefinition::create()->getDefinition())
                     ->append(Config\EnumTypeDefinition::create()->getDefinition())
                     ->append(Config\InterfaceTypeDefinition::create()->getDefinition())
                     ->append(Config\UnionTypeDefinition::create()->getDefinition())
                     ->append(Config\InputObjectTypeDefinition::create()->getDefinition())
                     ->append(Config\CustomScalarTypeDefinition::create()->getDefinition())
+                    ->append(Config\DirectiveTypeDefinition::create()->getDefinition())
                     ->variableNode('config')->end()
                 ->end()
                 // _{TYPE}_config is renamed config

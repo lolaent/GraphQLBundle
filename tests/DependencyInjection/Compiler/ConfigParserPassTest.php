@@ -70,7 +70,7 @@ class ConfigParserPassTest extends TestCase
     public function testInternalConfigKeysShouldNotBeUsed($internalConfigKey): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Don\'t use internal config keys _object_config, _enum_config, _interface_config, _union_config, _input_object_config, _custom_scalar_config, replace it by "config" instead.');
+        $this->expectExceptionMessage('Don\'t use internal config keys _object_config, _objectExtension_config, _enum_config, _interface_config, _union_config, _input_object_config, _custom_scalar_config, replace it by "config" instead.');
         $configs = [
             ['bar' => [$internalConfigKey => []]],
         ];
