@@ -6,6 +6,7 @@ namespace Overblog\GraphQLBundle\Config\Parser;
 
 use GraphQL\Language\AST\DefinitionNode;
 use GraphQL\Language\AST\NodeKind;
+use GraphQL\Language\AST\NodeList;
 use GraphQL\Language\Parser;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,6 +30,7 @@ class GraphQLParser implements ParserInterface
      */
     public static function parse(\SplFileInfo $file, ContainerBuilder $container, array $configs = []): array
     {
+        $entities = [];
         $container->addResource(new FileResource($file->getRealPath()));
         $content = \trim(\file_get_contents($file->getPathname()));
         $typesConfig = [];
@@ -45,13 +47,29 @@ class GraphQLParser implements ParserInterface
 
         foreach ($ast->definitions as $typeDef) {
             if (isset($typeDef->kind) && \in_array($typeDef->kind, \array_keys(self::DEFINITION_TYPE_MAPPING))) {
+                $directives = $typeDef->directives ?? [];
+                foreach ($directives as $directive){
+                    $directiveName = $directive->name->value ?? "";
+                    if ($directiveName == "key"){
+                        $entities[] = $typeDef->name->value;
+                        break;
+                    }
+                }
+                if ($typeDef->name->value == '_Entity'){
+                    $lines = file($file->getRealPath());
+                    array_pop($lines);
+                    $newContent = join('',$lines);
+                    $schema = $file->openFile('w');
+                    $schema->fwrite($newContent);
+                }
                 $class = \sprintf('\\%s\\GraphQL\\ASTConverter\\%sNode', __NAMESPACE__, \ucfirst(self::DEFINITION_TYPE_MAPPING[$typeDef->kind]));
                 $typesConfig[$typeDef->name->value] = \call_user_func([$class, 'toConfig'], $typeDef);
             } else {
                 self::throwUnsupportedDefinitionNode($typeDef);
             }
         }
-
+        $schema = $file->openFile('a');
+        $schema->fwrite("union _Entity = ".implode(' | ', $entities));
         return $typesConfig;
     }
 
