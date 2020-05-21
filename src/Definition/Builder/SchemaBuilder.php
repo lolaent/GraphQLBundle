@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Overblog\GraphQLBundle\Definition\Builder;
 
+use GraphQL\Language\DirectiveLocation;
+use GraphQL\Type\Definition\Directive;
+use GraphQL\Type\Definition\FieldArgument;
 use GraphQL\Type\Definition\Type;
 use Overblog\GraphQLBundle\Definition\Type\ExtensibleSchema;
 use Overblog\GraphQLBundle\Definition\Type\SchemaExtension\ValidatorExtension;
@@ -51,7 +54,17 @@ class SchemaBuilder
         $mutation = $this->typeResolver->resolve($mutationAlias);
         $subscription = $this->typeResolver->resolve($subscriptionAlias);
 
-        $schema = new ExtensibleSchema($this->buildSchemaArguments($name, $query, $mutation, $subscription, $types));
+        //$directives = $this->typeResolver->resolve();
+        $directives = [
+            new Directive(
+                [
+                    'name'        => 'external',
+                    'description' => 'External field for federation',
+                    'locations'   => [DirectiveLocation::FIELD_DEFINITION],
+                ]
+            )
+        ];
+        $schema = new ExtensibleSchema($this->buildSchemaArguments($name, $query, $mutation, $subscription, $types, $directives));
         $extensions = [];
 
         if ($this->enableValidation) {
@@ -62,12 +75,13 @@ class SchemaBuilder
         return $schema;
     }
 
-    private function buildSchemaArguments(string $schemaName, Type $query, ?Type $mutation, ?Type $subscription, array $types = []): array
+    private function buildSchemaArguments(string $schemaName, Type $query, ?Type $mutation, ?Type $subscription, array $types = [], array $directives): array
     {
         return [
             'query' => $query,
             'mutation' => $mutation,
             'subscription' => $subscription,
+            'directives' => $directives,
             'typeLoader' => function ($name) use ($schemaName) {
                 $this->typeResolver->setCurrentSchemaName($schemaName);
 

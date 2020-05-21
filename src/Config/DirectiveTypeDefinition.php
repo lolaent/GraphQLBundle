@@ -11,6 +11,8 @@ class DirectiveTypeDefinition extends TypeDefinition
         $node
             ->children()
                 ->append($this->nameSection())
+                ->scalarNode('class_name')
+                ->end()
                 ->append($this->descriptionSection())
                 ->arrayNode('locations')
                     ->prototype('scalar')->info('One of the directive locations.')->end()

@@ -85,6 +85,10 @@ abstract class TypeWithOutputFieldsDefinition extends TypeDefinition
                 ->variableNode('complexity')
                     ->info('Custom complexity calculator.')
                 ->end()
+                ->arrayNode('directives')
+                    ->prototype('scalar')
+                    ->info('Custom directives.')
+                ->end()
             ->end();
 
         return $node;

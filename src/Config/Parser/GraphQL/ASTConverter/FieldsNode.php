@@ -28,6 +28,9 @@ class FieldsNode implements NodeInterface
                 if (isset($directiveConfig['deprecationReason'])) {
                     $fieldConfig['deprecationReason'] = $directiveConfig['deprecationReason'];
                 }
+                if (isset($directiveConfig['directives'])) {
+                    $fieldConfig['directives'] = $directiveConfig['directives'];
+                }
 
                 $config[$definition->name->value] = $fieldConfig;
             }
